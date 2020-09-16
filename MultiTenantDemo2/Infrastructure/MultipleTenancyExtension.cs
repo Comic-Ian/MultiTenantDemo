@@ -33,13 +33,18 @@ namespace MultiTenantDemo2.Infrastructure
 
             return services.AddDatabase<TDbContext>(option);
         }
-
+        //TenantModelCacheKeyFactory的作用主要是创建TenantModelCacheKey实例。TenantModelCacheKey的作用是作为一个键值，标识dbContext中的OnModelCreating否需要调用。
+        //为什么这样做呢？因为ef core为了优化效率，避免在dbContext每次实例化的时候，都需要重新构建数据实体模型。
+        //在默认情况下，OnModelCreating只会调用一次就会存在缓存。但由于我们创建了TenantModelCacheKey，使得我们有机会判断在什么情况下需要重新调用OnModelCreating
         internal static IServiceCollection AddDatabase<TDbContext>(this IServiceCollection services,
                 ConnectionResolverOption option)
             where TDbContext : DbContext, ITenantDbContext
         {
+            //容器的三部曲：实例化一个容器、注册、获取服务
+            // 单例生命周期  在容器中永远只有当前这一个 AddSingleton
             services.AddSingleton(option);
 
+            //当前请求作用域内  只有当前这个实例 AddScoped
             services.AddScoped<TenantInfo>();
             services.AddScoped<ISqlConnectionResolver, TenantSqlConnectionResolver>();
             services.AddDbContext<TDbContext>((serviceProvider, options) =>

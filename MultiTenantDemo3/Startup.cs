@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MultiTenantDemo3.Infrastructure;
+using MultiTenantDemo3.Model;
 
 namespace MultiTenantDemo3
 {
@@ -28,6 +28,9 @@ namespace MultiTenantDemo3
 
             app.UseRouting();
 
+            TestOne();
+            TestTwo();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
@@ -35,6 +38,30 @@ namespace MultiTenantDemo3
                     await context.Response.WriteAsync("Hello World!");
                 });
             });
+        }
+
+        static void TestOne()
+        {
+            TestContext context = new TestContext();
+            int count = context.People.Count();
+            Console.WriteLine(count);
+        }
+        static void TestTwo()
+        {
+            DateTime start = DateTime.Now;
+            TestContext context = new TestContext();
+            for (int i = 0; i < 10000; i++)
+            {
+                context.People.Add(new People()
+                {
+                    Name = "a"+i,
+                    Sex = false,
+                    BirNum = i
+                });
+                context.SaveChanges();
+            }
+            Console.WriteLine(context.People.Count());
+            Console.WriteLine("总时间,秒数：" + (DateTime.Now - start).TotalSeconds);
         }
     }
 }
