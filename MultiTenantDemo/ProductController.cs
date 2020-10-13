@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MultiTenantDemo.DAL;
+using MultiTenantDemo.Infrastructure;
 using static MultiTenantDemo.Infrastructure.MultipleTenancyExtension;
 
 namespace MultiTenantDemo

@@ -18,7 +18,7 @@ namespace MultiTenantDemo.Model
             var tenantInfo = context.RequestServices.GetRequiredService<TenantInfo>();
             var tenantName = context.Request.Headers["Tenant"];
 
-            if(string.IsNullOrEmpty(tenantName))
+            if (string.IsNullOrEmpty(tenantName))
             {
                 tenantName = "default";
             }

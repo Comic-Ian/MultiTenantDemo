@@ -14,7 +14,7 @@ namespace MultiTenantDemo.Infrastructure
                 var resolver = serviceProvider.GetRequiredService<ISqlConnectionResolver>();
 
                 options.UseSqlServer(resolver.GetConnection());
-            });
+            }); 
 
             return services;
         }
